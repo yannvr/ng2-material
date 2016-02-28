@@ -1,5 +1,6 @@
 import {isPresent} from "angular2/src/facade/lang";
 import {NumberWrapper} from "angular2/src/facade/lang";
+import {TimerWrapper} from "angular2/src/facade/async";
 /**
  * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
@@ -13,8 +14,8 @@ export function debounce(func, wait, scope) {
     var context = scope,
         args    = Array.prototype.slice.call(arguments);
 
-    clearTimeout(timer);
-    timer = setTimeout(function () {
+    TimerWrapper.clearTimeout(timer);
+    timer = TimerWrapper.setTimeout(function () {
 
       timer = undefined;
       func.apply(context, args);

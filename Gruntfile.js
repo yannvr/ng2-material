@@ -338,6 +338,74 @@ module.exports = function (grunt) {
     });
   });
 
+  grunt.registerTask('render', 'Prerender your Universal (isomorphic) Angular 2 app', function () {
+    // TODO: for callstacks on errors, move the requires outside of this function.
+    var zone = require('zone.js');
+    var reflect = require('reflect-metadata');
+    var provide = require('angular2/core');
+    var router = require('angular2/router');
+    var app = require('./examples/app');
+    var universal = require('angular2-universal-preview');
+
+    // var universal = {
+    //   NODE_HTTP_PROVIDERS,
+    //   NODE_LOCATION_PROVIDERS,
+    //   REQUEST_URL,
+    //   PRIME_CACHE,
+    //   queryParamsToBoolean
+    // };
+
+    var options = {
+      App: app.DemosApp,
+      providers: [],
+      preboot: false,
+      separator: '\r\n'
+    };
+    var angular2Prerender = function (file) {
+      var str = file.toString();
+      var renderPromise = universal.renderToString;
+      var args = [this.options.App, this.options.providers];
+      if (this.options.preboot) {
+        renderPromise = universal.renderToStringWithPreboot;
+        args.push(this.options.preboot);
+      }
+      return renderPromise.apply(null, args)
+        .then(function (serializedApp) {
+          var html = str.replace(
+            // <selector></selector>
+            universal.selectorRegExpFactory(universal.selectorResolver(options.App)),
+            // <selector>{{ serializedCmp }}</selector>
+            serializedApp);
+          return new Buffer(html);
+        });
+    };
+    this.files.forEach(function (f) {
+      var src = f.src.filter(function (filepath) {
+          if (!grunt.file.exists(filepath)) {
+            grunt.log.warn('Source file "' + filepath + '" not found.');
+            return false;
+          }
+          else {
+            return true;
+          }
+        })
+        .map(function (filepath) {
+          return grunt.file.read(filepath);
+        })
+        .join(grunt.util.normalizelf(options.separator));
+      // Handle options.
+      angular2Prerender(src)
+        .then(function (buffer) {
+          return src = buffer;
+        })
+        .then(function (_src) {
+          return grunt.file.write(f.dest, _src);
+        })
+        .then(function (_) {
+          return grunt.log.writeln('File "' + f.dest + '" created.');
+        });
+    });
+  });
 
   grunt.registerTask('site-meta', 'Build metadata files describing example usages', function (tag) {
     var done = this.async();

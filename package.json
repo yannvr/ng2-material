@@ -25,8 +25,10 @@
   },
   "typings": "dist/ng2-material.d.ts",
   "devDependencies": {
+    "angular2-universal-preview": "*",
     "autoprefixer": "6.2.0",
     "coveralls": "2.11.6",
+    "css": "^2.2.1",
     "css-loader": "0.23.1",
     "dts-generator": "1.6.3",
     "es6-module-loader": "0.17.4",
@@ -58,6 +60,7 @@
     "karma-sauce-launcher": "0.3.0",
     "lcov-parse": "0.0.10",
     "marked": "0.3.5",
+    "preboot": "^1.1.0",
     "remap-istanbul": "0.4.0",
     "style-loader": "0.13.0",
     "systemjs-builder": "justindujardin/builder.git#typescript-source-maps",

@@ -17,11 +17,11 @@ export class Animate {
       DOM.addClass(el, cssClass + '-add');
       TimerWrapper.setTimeout(() => {
         var duration = Animate.getTransitionDuration(el, true);
-        var callTimeout = setTimeout(() => done(), duration);
+        var callTimeout = TimerWrapper.setTimeout(() => done(), duration);
         var done = () => {
           DOM.removeClass(el, cssClass + '-add-active');
           DOM.removeClass(el, cssClass + '-add');
-          clearTimeout(callTimeout);
+          TimerWrapper.clearTimeout(callTimeout);
           removeListener();
           resolve();
         };
@@ -37,12 +37,12 @@ export class Animate {
       DOM.addClass(el, cssClass + '-remove');
       TimerWrapper.setTimeout(() => {
         var duration = Animate.getTransitionDuration(el, true);
-        var callTimeout = setTimeout(() => done(), duration);
+        var callTimeout = TimerWrapper.setTimeout(() => done(), duration);
 
         var done = () => {
           DOM.removeClass(el, cssClass + '-remove-active');
           DOM.removeClass(el, cssClass + '-remove');
-          clearTimeout(callTimeout);
+          TimerWrapper.clearTimeout(callTimeout);
           removeListener();
           resolve();
         };
@@ -109,10 +109,10 @@ export class Animate {
     let saveDuration = Animate.getTransitionDuration(element);
     Animate.setTransitionDuration(element, durationMs);
     return new Promise<void>((animResolve, animReject) => {
-      let callTimeout = setTimeout(() => done(), durationMs);
+      let callTimeout = TimerWrapper.setTimeout(() => done(), durationMs);
 
       let done = () => {
-        clearTimeout(callTimeout);
+        TimerWrapper.clearTimeout(callTimeout);
         removeListener();
         if (saveDuration !== -1) {
           Animate.setTransitionDuration(element, saveDuration);

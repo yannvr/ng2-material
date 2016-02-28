@@ -1,5 +1,6 @@
 import {Component, View, enableProdMode, bind, Input, OnDestroy, ApplicationRef} from "angular2/core";
-import {bootstrap} from "angular2/platform/browser";
+// import {bootstrap} from "angular2/bootstrap";
+import {bootstrap} from 'angular2-universal-preview';
 import {
   ROUTER_PROVIDERS,
   ROUTER_DIRECTIVES,
@@ -105,8 +106,8 @@ let appProviders = [
   bind(LocationStrategy).toClass(HashLocationStrategy)
 ];
 
-if (window.location.href.indexOf('github.com') !== -1) {
-  enableProdMode();
-}
+// if (window.location.href.indexOf('github.com') !== -1) {
+//   enableProdMode();
+// }
 
 bootstrap(DemosApp, appProviders);
